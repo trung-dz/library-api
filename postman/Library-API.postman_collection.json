@@ -1,0 +1,447 @@
+{
+  "info": {
+    "_postman_id": "af33e8bb-fc44-4945-8eb1-4c4964fe57c7",
+    "name": "Library API",
+    "description": "Lab 4 – 12 test case CRUD theo đúng thứ tự chạy",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59141154",
+    "_collection_link": "https://go.postman.co/collection/59141154-af33e8bb-fc44-4945-8eb1-4c4964fe57c7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "TC01 - Health Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC01 - Health Check: HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC01 - Health Check: kiểm tra dữ liệu\", function () { pm.expect(pm.response.json().status).to.eql(\"ok\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC02 - Get All Books",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC02 - Get All Books: HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC02 - Get All Books: kiểm tra dữ liệu\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC03 - Filter Books",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC03 - Filter Books: HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC03 - Filter Books: kiểm tra dữ liệu\", function () { pm.expect(pm.response.json()).to.have.lengthOf(1); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books?author=hùng&limit=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ],
+          "query": [
+            {
+              "key": "author",
+              "value": "hùng"
+            },
+            {
+              "key": "limit",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC04 - Get Book By ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC04 - Get Book By ID: HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC04 - Get Book By ID: kiểm tra dữ liệu\", function () { pm.expect(pm.response.json().id).to.eql(1); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC05 - Book Not Found",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC05 - Book Not Found: HTTP 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC06 - Create Book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC06 - Create Book: HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"TC06 - Create Book: kiểm tra dữ liệu\", function () { const book = pm.response.json(); pm.expect(book.id).to.be.a(\"number\"); pm.expect(book.isbn).to.eql(\"9786040000042\"); pm.collectionVariables.set(\"bookId\", book.id); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"9786040000042\",\n  \"title\": \"Phát triển Web API với FastAPI\",\n  \"author\": \"Lê Minh Tuấn\",\n  \"year\": 2024,\n  \"quantity\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC07 - Duplicate ISBN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC07 - Duplicate ISBN: HTTP 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"9786040000042\",\n  \"title\": \"Phát triển Web API với FastAPI\",\n  \"author\": \"Lê Minh Tuấn\",\n  \"year\": 2024,\n  \"quantity\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC08 - Invalid Book Data",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC08 - Invalid Book Data: HTTP 422\", function () { pm.response.to.have.status(422); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"123\",\n  \"title\": \"Sách thử nghiệm\",\n  \"author\": \"Nguyễn Văn A\",\n  \"year\": 1800,\n  \"quantity\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC09 - Replace Book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC09 - Replace Book: HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC09 - Replace Book: kiểm tra dữ liệu\", function () { pm.expect(pm.response.json().title).to.eql(\"Lập trình FastAPI nâng cao\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"9786040000042\",\n  \"title\": \"Lập trình FastAPI nâng cao\",\n  \"author\": \"Lê Minh Tuấn\",\n  \"year\": 2025,\n  \"quantity\": 8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC10 - Patch Book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC10 - Patch Book: HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"TC10 - Patch Book: kiểm tra dữ liệu\", function () { pm.expect(pm.response.json().quantity).to.eql(10); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC11 - Delete Book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC11 - Delete Book: HTTP 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC12 - Verify Deleted",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"TC12 - Verify Deleted: HTTP 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "bookId",
+      "value": ""
+    }
+  ]
+}
